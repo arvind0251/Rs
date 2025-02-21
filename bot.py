@@ -35,13 +35,12 @@ def save_logs():
 # Initialize the Telegram client
 client = TelegramClient("session", API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
-# Send start message when bot starts
-async def send_start_message():
+# Send start message when user starts the bot
+@client.on(events.NewMessage(pattern='/start'))
+async def start_message(event):
+    user_id = event.sender_id
     owner_message = "😊 SAVE RESTRICTED CONTENT SAVE BOT 😊\n\nBOT OWNER = @RU_DRA_65\nOWNER = @KAARTIK_NISHAD"
-    try:
-        await client.send_message(DESTINATION_GROUP_ID, owner_message)
-    except Exception as e:
-        print(f"Error sending start message: {e}")
+    await client.send_message(user_id, owner_message)
 
 @client.on(events.NewMessage(pattern='/addwhitelist (\d+)'))
 async def add_whitelist(event):
@@ -117,7 +116,5 @@ async def handler(event):
 load_logs()
 print("Bot is running...")
 
-# Run startup function to send message
-with client:
-    client.loop.run_until_complete(send_start_message())
-    client.run_until_disconnected()
+# Run the bot
+client.run_until_disconnected()
