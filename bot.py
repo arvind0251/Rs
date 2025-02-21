@@ -13,7 +13,7 @@ DESTINATION_GROUP_ID = -1002136294449  # Replace with your group ID
 ADMIN_USERS = {7256617868, 7408008545}  # Replace with Telegram Admin User IDs
 
 # Whitelist of users allowed to download
-WHITELIST_USERS = {7408008545, 7256617868}  # Replace with Telegram User IDs
+WHITELIST_USERS = {123456789, 987654321}  # Replace with Telegram User IDs
 
 # Limitations per user per day
 DAILY_LIMIT = 3  # Maximum downloads allowed per user per day
@@ -35,7 +35,14 @@ def save_logs():
 # Initialize the Telegram client
 client = TelegramClient("session", API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
-# Command to add user to whitelist
+# Send start message when bot starts
+async def send_start_message():
+    owner_message = "😊 SAVE RESTRICTED CONTENT SAVE BOT 😊\n\nBOT OWNER = @RU_DRA_65\nOWNER = @KAARTIK_NISHAD"
+    try:
+        await client.send_message(DESTINATION_GROUP_ID, owner_message)
+    except Exception as e:
+        print(f"Error sending start message: {e}")
+
 @client.on(events.NewMessage(pattern='/addwhitelist (\d+)'))
 async def add_whitelist(event):
     sender = await event.get_sender()
@@ -48,7 +55,7 @@ async def add_whitelist(event):
 
 # Function to download media from link
 async def download_from_link(event, link):
-    match = re.search(r"t\.me/(c/)?(\d+)/?(\d+)?", link)
+    match = re.search(r"t\.me/(c/)?([-\d]+)/?(\d+)?", link)
     if not match:
         await event.reply("❌ Invalid Telegram link!")
         return
@@ -109,4 +116,8 @@ async def handler(event):
 # Load logs on startup
 load_logs()
 print("Bot is running...")
-client.run_until_disconnected()
+
+# Run startup function to send message
+with client:
+    client.loop.run_until_complete(send_start_message())
+    client.run_until_disconnected()
