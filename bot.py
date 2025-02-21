@@ -13,7 +13,7 @@ DESTINATION_GROUP_ID = -1002136294449  # Replace with your group ID
 ADMIN_USERS = {7256617868, 7408008545}  # Replace with Telegram Admin User IDs
 
 # Whitelist of users allowed to download
-WHITELIST_USERS = {123456789, 987654321}  # Replace with Telegram User IDs
+WHITELIST_USERS = {7256617868, 7408008545}  # Replace with Telegram User IDs
 
 # Limitations per user per day
 DAILY_LIMIT = 3  # Maximum downloads allowed per user per day
